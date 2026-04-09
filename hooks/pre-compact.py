@@ -141,8 +141,12 @@ def main() -> None:
     # Spawn flush.py as a background process
     flush_script = SCRIPTS_DIR / "flush.py"
 
+    # Resolve absolute path to uv — hooks run in minimal shells without ~/.local/bin
+    import shutil
+    uv_bin = shutil.which("uv") or str(Path.home() / ".local" / "bin" / "uv")
+
     cmd = [
-        "uv",
+        uv_bin,
         "run",
         "--directory",
         str(ROOT),

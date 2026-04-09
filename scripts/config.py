@@ -1,6 +1,7 @@
 """Path constants and configuration for the personal knowledge base."""
 
 import json
+import shutil
 from pathlib import Path
 from datetime import datetime, timezone
 
@@ -23,6 +24,11 @@ REPOS_CONFIG_FILE = ROOT_DIR / "repos.json"
 INDEX_FILE = KNOWLEDGE_DIR / "index.md"
 LOG_FILE = KNOWLEDGE_DIR / "log.md"
 STATE_FILE = SCRIPTS_DIR / "state.json"
+
+# ── UV binary path (resolved once at import time) ────────────────────
+# Hooks run in minimal shells that may not have ~/.local/bin in PATH.
+# Resolve the absolute path so subprocess calls always work.
+UV_BIN = shutil.which("uv") or str(Path.home() / ".local" / "bin" / "uv")
 
 
 # ── Repo configuration (loaded from repos.json) ──────────────────────

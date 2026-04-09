@@ -174,7 +174,8 @@ def maybe_trigger_compilation() -> None:
 
     logging.info("End-of-day compilation triggered (after %d:00)", COMPILE_AFTER_HOUR)
 
-    cmd = ["uv", "run", "--directory", str(ROOT), "python", str(compile_script)]
+    from config import UV_BIN
+    cmd = [UV_BIN, "run", "--directory", str(ROOT), "python", str(compile_script)]
 
     kwargs: dict = {}
     if sys.platform == "win32":
@@ -248,8 +249,9 @@ def maybe_trigger_repo_sync() -> None:
 
     logging.info("End-of-day repo sync triggered (repos have new commits)")
 
+    from config import UV_BIN
     cmd = [
-        "uv", "run", "--directory", str(ROOT),
+        UV_BIN, "run", "--directory", str(ROOT),
         "python", str(sync_script), "--changed-only",
     ]
 
