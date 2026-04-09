@@ -7,6 +7,10 @@ __pycache__/
 scripts/state.json
 scripts/state.lock
 scripts/last-flush.json
+scripts/last-daily-maintenance.json
+scripts/session-start.log
+scripts/daily-cron.log
+scripts/sync.log
 scripts/flush.log
 scripts/compile.log
 scripts/session-flush-*
