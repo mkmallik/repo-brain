@@ -17,11 +17,20 @@ Adapted from [Karpathy's LLM Knowledge Base](https://gist.github.com/karpathy/44
 The easiest way to set up Repo Brain is to let Claude do it. Open Claude Code in any directory and paste this prompt:
 
 > Clone https://github.com/mkmallik/repo-brain.git into a directory of your choice. Then:
-> 1. Run `uv sync` to install dependencies
-> 2. Add my repos to the knowledge base using `uv run python scripts/add_repo.py <remote_url>`. For each repo I work on locally, also pass `--working-copy /path/to/my/local/copy` so dev activity gets captured.
-> 3. Run `uv run python scripts/scan_repo.py` to deep-scan all added repos into the knowledge base (this uses a two-phase LLM approach and may take a few minutes per repo).
+> 1. Run `uv sync` to install dependencies (install uv first if needed: `curl -LsSf https://astral.sh/uv/install.sh | sh`)
+> 2. Add my repos to the knowledge base. Here are the repos I want tracked:
+>    - `https://github.com/CopperOneOrg/coplatform.git` (working copy at `~/projects/coplatform`)
+>    - `https://github.com/CopperOneOrg/doc-process-27x7.git` (working copy at `~/projects/doc-process-27x7`)
+>    - `https://github.com/CopperOneOrg/docread-consumer.git` (working copy at `~/projects/docread-consumer`)
+>    - `https://github.com/CopperOneOrg/oasis-llm-processor.git` (working copy at `~/projects/oasis-llm-processor`)
+>    - `https://github.com/CopperOneOrg/patient-management-fe.git` (working copy at `~/projects/patient-management-fe`)
+>    
+>    Use `uv run python scripts/add_repo.py <remote_url> --working-copy <path>` for each. Adjust the working copy paths to match where I have these repos cloned locally.
+> 3. Run `uv run python scripts/scan_repo.py --repo <name>` for each repo to deep-scan it into the knowledge base. You can run multiple scans in parallel — each takes a few minutes.
 > 4. Set up global Claude Code hooks in `~/.claude/settings.json` so every future session has access to the knowledge base. The hooks need absolute paths with `--directory` pointing to where you cloned repo-brain. Add SessionStart (runs `hooks/session-start.py`, timeout 15), SessionEnd (runs `hooks/session-end.py`, timeout 10), and PreCompact (runs `hooks/pre-compact.py`, timeout 10).
 > 5. Read AGENTS.md for the full technical reference.
+>
+> Replace the repo URLs and working copy paths above with your own repos.
 
 Claude will handle cloning, installing, scanning your repos, and configuring the hooks. Once done, every new Claude Code session — in any project — will have your knowledge base injected automatically.
 
