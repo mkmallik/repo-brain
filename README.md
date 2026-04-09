@@ -62,12 +62,14 @@ uv run python scripts/scan_repo.py  # interactive, scans all
 # Add to ~/.claude/settings.json:
 ```
 
+**Important:** Use the absolute path to `uv` (run `which uv` to find it) — hooks run in a minimal shell that may not include `~/.local/bin` in PATH.
+
 ```json
 {
   "hooks": {
-    "SessionStart": [{"matcher": "", "hooks": [{"type": "command", "command": "uv run --directory /path/to/repo-brain python hooks/session-start.py", "timeout": 15}]}],
-    "PreCompact": [{"matcher": "", "hooks": [{"type": "command", "command": "uv run --directory /path/to/repo-brain python hooks/pre-compact.py", "timeout": 10}]}],
-    "SessionEnd": [{"matcher": "", "hooks": [{"type": "command", "command": "uv run --directory /path/to/repo-brain python hooks/session-end.py", "timeout": 10}]}]
+    "SessionStart": [{"matcher": "", "hooks": [{"type": "command", "command": "/absolute/path/to/uv run --directory /path/to/repo-brain python hooks/session-start.py", "timeout": 15}]}],
+    "PreCompact": [{"matcher": "", "hooks": [{"type": "command", "command": "/absolute/path/to/uv run --directory /path/to/repo-brain python hooks/pre-compact.py", "timeout": 10}]}],
+    "SessionEnd": [{"matcher": "", "hooks": [{"type": "command", "command": "/absolute/path/to/uv run --directory /path/to/repo-brain python hooks/session-end.py", "timeout": 10}]}]
   }
 }
 ```
