@@ -33,17 +33,20 @@ git clone https://github.com/mkmallik/repo-brain.git
 cd repo-brain
 uv sync
 
-# 2. Add your repos
-uv run python scripts/add_repo.py https://github.com/your-org/backend-api.git
-uv run python scripts/add_repo.py https://github.com/your-org/frontend.git
+# 2. Add your repos (examples using CopperOne Healthcare Platform)
+uv run python scripts/add_repo.py https://github.com/CopperOneOrg/coplatform.git
+uv run python scripts/add_repo.py https://github.com/CopperOneOrg/doc-process-27x7.git
+uv run python scripts/add_repo.py https://github.com/CopperOneOrg/docread-consumer.git
+uv run python scripts/add_repo.py https://github.com/CopperOneOrg/oasis-llm-processor.git
+uv run python scripts/add_repo.py https://github.com/CopperOneOrg/patient-management-fe.git
 
 # Optionally link your local working copies (for dev activity capture)
-uv run python scripts/add_repo.py https://github.com/your-org/backend-api.git \
-  --name backend-api \
-  --working-copy ~/projects/backend-api
+uv run python scripts/add_repo.py https://github.com/CopperOneOrg/coplatform.git \
+  --name coplatform \
+  --working-copy ~/projects/coplatform
 
 # 3. Scan repos into the knowledge base
-uv run python scripts/scan_repo.py --repo backend-api
+uv run python scripts/scan_repo.py --repo coplatform
 uv run python scripts/scan_repo.py  # interactive, scans all
 
 # 4. Set up global hooks (works from any Claude Code session)
@@ -159,12 +162,16 @@ All repo configuration lives in `repos.json`:
 ```json
 {
   "repos": {
-    "backend-api": {
-      "remote": "https://github.com/your-org/backend-api.git",
-      "working_copy": "/Users/you/projects/backend-api"
+    "coplatform": {
+      "remote": "https://github.com/CopperOneOrg/coplatform.git",
+      "working_copy": "/Users/you/projects/coplatform"
     },
-    "frontend": {
-      "remote": "https://github.com/your-org/frontend.git"
+    "doc-process-27x7": {
+      "remote": "https://github.com/CopperOneOrg/doc-process-27x7.git",
+      "working_copy": "/Users/you/projects/doc-process-27x7"
+    },
+    "patient-management-fe": {
+      "remote": "https://github.com/CopperOneOrg/patient-management-fe.git"
     }
   }
 }
