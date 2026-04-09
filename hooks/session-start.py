@@ -29,7 +29,7 @@ REPOS_DIR = KNOWLEDGE_DIR / "repos"
 INDEX_FILE = KNOWLEDGE_DIR / "index.md"
 STATE_FILE = ROOT / "scripts" / "state.json"
 
-MAX_CONTEXT_CHARS = 20_000
+MAX_CONTEXT_CHARS = 40_000
 MAX_LOG_LINES = 30
 
 
@@ -84,6 +84,11 @@ def build_context() -> str:
     today = datetime.now(timezone.utc).astimezone()
     parts.append(f"## Today\n{today.strftime('%A, %B %d, %Y')}")
 
+    # Repo knowledge summary (concise, always fits — put first for visibility)
+    repo_summary = get_repo_summary()
+    if repo_summary:
+        parts.append(f"## Repo Knowledge\n\n{repo_summary}")
+
     # Knowledge base index (the core retrieval mechanism)
     if INDEX_FILE.exists():
         index_content = INDEX_FILE.read_text(encoding="utf-8")
@@ -91,14 +96,19 @@ def build_context() -> str:
     else:
         parts.append("## Knowledge Base Index\n\n(empty - no articles compiled yet)")
 
-    # Repo knowledge summary
-    repo_summary = get_repo_summary()
-    if repo_summary:
-        parts.append(f"## Repo Knowledge\n\n{repo_summary}")
-
     # Recent daily log
     recent_log = get_recent_log()
     parts.append(f"## Recent Daily Log\n\n{recent_log}")
+
+    # Instructions for using the knowledge base
+    kb_path = str(KNOWLEDGE_DIR)
+    parts.append(
+        f"## How to Use This Knowledge Base\n\n"
+        f"The knowledge base lives at `{kb_path}/`. "
+        f"To answer questions about repo architecture, read the relevant article files directly. "
+        f"For example, to learn about coplatform's architecture, read `{kb_path}/repos/coplatform/overview.md`. "
+        f"Use `uv run python scripts/query.py \"question\"` for index-guided search."
+    )
 
     context = "\n\n---\n\n".join(parts)
 
