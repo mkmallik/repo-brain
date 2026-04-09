@@ -1,4 +1,4 @@
-# Second Brain - AI Knowledge Base Compiler
+# Repo Brain - AI Knowledge Base Compiler
 
 **Your AI conversations + your codebases compile themselves into a searchable knowledge base.**
 
@@ -12,12 +12,25 @@ Adapted from [Karpathy's LLM Knowledge Base](https://gist.github.com/karpathy/44
 4. **Dev activity tracking** - Captures your commits and uncommitted changes from working copies
 5. **Index-guided retrieval** - Ask questions and get answers with wikilink citations (no RAG, no vector DB)
 
-## Quick Start
+## Setup via Claude Code (Recommended)
+
+The easiest way to set up Repo Brain is to let Claude do it. Open Claude Code in any directory and paste this prompt:
+
+> Clone https://github.com/mkmallik/repo-brain.git into a directory of your choice. Then:
+> 1. Run `uv sync` to install dependencies
+> 2. Add my repos to the knowledge base using `uv run python scripts/add_repo.py <remote_url>`. For each repo I work on locally, also pass `--working-copy /path/to/my/local/copy` so dev activity gets captured.
+> 3. Run `uv run python scripts/scan_repo.py` to deep-scan all added repos into the knowledge base (this uses a two-phase LLM approach and may take a few minutes per repo).
+> 4. Set up global Claude Code hooks in `~/.claude/settings.json` so every future session has access to the knowledge base. The hooks need absolute paths with `--directory` pointing to where you cloned repo-brain. Add SessionStart (runs `hooks/session-start.py`, timeout 15), SessionEnd (runs `hooks/session-end.py`, timeout 10), and PreCompact (runs `hooks/pre-compact.py`, timeout 10).
+> 5. Read AGENTS.md for the full technical reference.
+
+Claude will handle cloning, installing, scanning your repos, and configuring the hooks. Once done, every new Claude Code session — in any project — will have your knowledge base injected automatically.
+
+## Manual Setup
 
 ```bash
 # 1. Clone and install
-git clone https://github.com/mkmallik/second-brain.git
-cd second-brain
+git clone https://github.com/mkmallik/repo-brain.git
+cd repo-brain
 uv sync
 
 # 2. Add your repos
@@ -40,9 +53,9 @@ uv run python scripts/scan_repo.py  # interactive, scans all
 ```json
 {
   "hooks": {
-    "SessionStart": [{"matcher": "", "hooks": [{"type": "command", "command": "uv run --directory /path/to/second-brain python hooks/session-start.py", "timeout": 15}]}],
-    "PreCompact": [{"matcher": "", "hooks": [{"type": "command", "command": "uv run --directory /path/to/second-brain python hooks/pre-compact.py", "timeout": 10}]}],
-    "SessionEnd": [{"matcher": "", "hooks": [{"type": "command", "command": "uv run --directory /path/to/second-brain python hooks/session-end.py", "timeout": 10}]}]
+    "SessionStart": [{"matcher": "", "hooks": [{"type": "command", "command": "uv run --directory /path/to/repo-brain python hooks/session-start.py", "timeout": 15}]}],
+    "PreCompact": [{"matcher": "", "hooks": [{"type": "command", "command": "uv run --directory /path/to/repo-brain python hooks/pre-compact.py", "timeout": 10}]}],
+    "SessionEnd": [{"matcher": "", "hooks": [{"type": "command", "command": "uv run --directory /path/to/repo-brain python hooks/session-end.py", "timeout": 10}]}]
   }
 }
 ```
